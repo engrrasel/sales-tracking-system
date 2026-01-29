@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+
+<div class="layout">
+
+    {# Sidebar (reusable partial) #}
+    {% include "partials/sidebar.html" %}
+
+    <main class="main">
+        <header class="topbar">
+            <span>{{ request.user.email }}</span>
+            <a href="{% url 'accounts:logout' %}">Logout</a>
+        </header>
+
+        {% block content %}{% endblock %}
+    </main>
+
+</div>
+
+</body>
+</html>

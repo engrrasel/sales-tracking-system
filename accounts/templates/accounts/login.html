@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'accounts/auth.css' %}">
+</head>
+<body>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Login to your account</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn-primary">
+                Login
+            </button>
+        </form>
+
+        <!-- 👇 NEW -->
+        <div class="auth-footer">
+            <a href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+            <br>
+            <a href="{% url 'accounts:signup' %}">Create new account</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

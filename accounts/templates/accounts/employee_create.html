@@ -1,0 +1,13 @@
+{% extends "base/base_dashboard.html" %}
+
+{% block title %}Add Employee{% endblock %}
+
+{% block content %}
+<h2>Add Employee</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Employee</button>
+</form>
+{% endblock %}

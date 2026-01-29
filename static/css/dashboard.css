@@ -1,0 +1,243 @@
+/* ==============================
+   Global
+============================== */
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #f8fafc, #eef2f7);
+    color: #0f172a;
+}
+
+/* ==============================
+   Layout
+============================== */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ==============================
+   Sidebar (Light Glass)
+============================== */
+
+.sidebar {
+    width: 240px;
+    padding: 24px 18px;
+
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border-right: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: #020617;
+}
+
+/* Nav items */
+.nav-item {
+    display: block;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+
+    color: #334155;
+    text-decoration: none;
+    font-size: 14px;
+
+    transition: background .2s ease, color .2s ease;
+}
+
+.nav-item:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+}
+
+/* ==============================
+   Main Area
+============================== */
+
+.main {
+    flex: 1;
+    padding: 28px;
+}
+
+/* ==============================
+   Topbar (White Glass)
+============================== */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 14px 20px;
+    margin-bottom: 24px;
+
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(15,23,42,.08);
+}
+
+.topbar span {
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.topbar a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 500;
+}
+
+/* ==============================
+   Card (Clean White Glass)
+============================== */
+
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius: 16px;
+    padding: 26px;
+
+    box-shadow:
+        0 15px 35px rgba(15, 23, 42, 0.1),
+        inset 0 1px 0 rgba(255,255,255,.6);
+
+    max-width: 900px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.card p {
+    font-size: 14px;
+    margin: 6px 0;
+    color: #334155;
+}
+
+/* ==============================
+   Warning / Status
+============================== */
+
+.warning {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+
+    background: rgba(254, 226, 226, 0.9);
+    color: #991b1b;
+    font-size: 14px;
+    border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+
+.company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.company-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.company-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+}
+
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.company-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.owner {
+    color: #475569;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+/* Status badge */
+.status {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status.active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status.hold {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.btn-active {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-active:hover {
+    background: #15803d;
+}
+
+.btn-hold {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-hold:hover {
+    background: #b91c1c;
+}

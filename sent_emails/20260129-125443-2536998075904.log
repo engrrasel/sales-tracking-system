@@ -1,0 +1,12 @@
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Subject: Test email
+From: test@localhost
+To: test@example.com
+Date: Thu, 29 Jan 2026 06:54:43 +0000
+Message-ID: <176966968325.27812.9089848409752079843@Rasel>
+
+Hello from Django
+
+-------------------------------------------------------------------------------

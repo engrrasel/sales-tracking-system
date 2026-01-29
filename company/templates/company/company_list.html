@@ -1,0 +1,46 @@
+{% extends "base/base_dashboard.html" %}
+
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 20px;">All Companies</h2>
+
+<div class="company-grid">
+    {% for company in companies %}
+    <div class="company-card">
+
+        <div class="company-header">
+            <h3>{{ company.name }}</h3>
+            <span class="status {{ company.status }}">
+                {{ company.status|title }}
+            </span>
+        </div>
+
+        <p class="owner">
+            <strong>Owner:</strong> {{ company.owner.email }}
+        </p>
+
+        <div class="actions">
+            {% if company.status != "active" %}
+                <a
+                  href="{% url 'company:status_update' company.id 'active' %}"
+                  class="btn btn-active">
+                    Activate
+                </a>
+            {% endif %}
+
+            {% if company.status != "hold" %}
+                <a
+                  href="{% url 'company:status_update' company.id 'hold' %}"
+                  class="btn btn-hold">
+                    Hold
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+    {% empty %}
+        <p>No companies found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

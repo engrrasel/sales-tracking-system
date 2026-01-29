@@ -1,0 +1,32 @@
+<aside class="sidebar">
+    <h2 class="logo">Sales Tracker</h2>
+
+    <a href="{% url 'accounts:dashboard' %}"
+       class="nav-item {% if active_tab == 'dashboard' %}active{% endif %}">
+        Dashboard
+    </a>
+
+    {% if request.user.role == "company_admin" %}
+        <a href="{% url 'accounts:employee_list' %}"
+           class="nav-item {% if active_tab == 'employees' %}active{% endif %}">
+            Employees
+        </a>
+    {% endif %}
+
+    {% if request.user.role == "staff" %}
+        <a href="{% url 'accounts:my_tasks' %}"
+           class="nav-item {% if active_tab == 'tasks' %}active{% endif %}">
+            My Tasks
+        </a>
+    {% endif %}
+
+    {% if request.user.role == "superadmin" %}
+        <a href="{% url 'company:list' %}"
+           class="nav-item {% if active_tab == 'companies' %}active{% endif %}">
+            Companies
+        </a>
+    {% endif %}
+
+    {{ request.user.role }}
+
+</aside>
