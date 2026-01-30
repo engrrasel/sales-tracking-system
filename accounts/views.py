@@ -3,8 +3,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
+
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
+
 from .forms import SignupForm, LoginForm, EmployeeCreateForm
 from .models import User
+
+import secrets
+from django.contrib.auth.hashers import make_password
 
 
 def signup_view(request):
@@ -66,28 +73,9 @@ def dashboard_view(request):
     return render(request, "accounts/dashboard.html")
 
 
+
 @login_required
 def employee_list_view(request):
-    if request.user.role != "company_admin":
-        return HttpResponseForbidden("Access denied")
-
-    if not hasattr(request.user, "owned_company"):
-        return redirect("company:setup")
-
-    employees = User.objects.filter(
-        owned_company=request.user.owned_company,
-        role="salesman"   # ⚠️ employee না, salesman
-    )
-
-    return render(
-        request,
-        "accounts/employee_list.html",
-        {"employees": employees}
-    )
-
-
-@login_required
-def employee_create_view(request):
     if request.user.role != "company_admin":
         return HttpResponseForbidden("Access denied")
 
@@ -97,14 +85,58 @@ def employee_create_view(request):
     company = request.user.owned_company
 
     if company.status != "active":
-        return HttpResponseForbidden("Company not active")
+        return HttpResponseForbidden("Your company is not approved yet.")
 
-    form = EmployeeCreateForm(request.POST or None)
+    employees = (
+        company.employees
+        .filter(role="salesman")
+        .select_related("designation")
+    )
+
+    return render(
+        request,
+        "accounts/employee_list.html",
+        {
+            "employees": employees,
+        }
+    )
+
+
+
+DEFAULT_EMPLOYEE_PASSWORD = "12345678"
+
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect, render
+
+from .forms import EmployeeCreateForm
+
+
+@login_required
+def employee_create_view(request):
+    # 🔐 Only company admin
+    if request.user.role != "company_admin":
+        return HttpResponseForbidden("Access denied")
+
+    # 🏢 Company must exist
+    if not hasattr(request.user, "owned_company"):
+        return redirect("company:setup")
+
+    company = request.user.owned_company
+
+    # ✅ Company must be approved
+    if company.status != "active":
+        return HttpResponseForbidden("Your company is not approved yet.")
+
+    # 📋 Form
+    form = EmployeeCreateForm(
+        request.POST or None,
+        company=company
+    )
 
     if request.method == "POST" and form.is_valid():
-        employee = form.save(commit=False)
-        employee.owned_company = company
-        employee.save()
+        employee = form.save()
         return redirect("accounts:employee_list")
 
     return render(
@@ -112,3 +144,37 @@ def employee_create_view(request):
         "accounts/employee_create.html",
         {"form": form}
     )
+
+
+@login_required
+@require_POST
+def employee_delete_view(request, employee_id):
+
+    # only company admin
+    if request.user.role != "company_admin":
+        return HttpResponseForbidden("Access denied")
+
+    # company must exist
+    if not hasattr(request.user, "owned_company"):
+        return redirect("company:setup")
+
+    company = request.user.owned_company
+
+    # company must be active
+    if company.status != "active":
+        return HttpResponseForbidden("Company not active")
+
+    # employee must belong to same company
+    employee = get_object_or_404(
+        User,
+        id=employee_id,
+        role="salesman",
+    )
+
+    # ❌ extra safety: owner cannot delete himself
+    if employee == request.user:
+        return HttpResponseForbidden("You cannot delete yourself")
+
+    employee.delete()
+
+    return redirect("accounts:employee_list")

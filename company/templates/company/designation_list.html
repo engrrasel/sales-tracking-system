@@ -1,0 +1,51 @@
+{% extends "base/base_dashboard.html" %}
+
+{% block title %}Designations{% endblock %}
+
+{% block content %}
+<h2>Designations</h2>
+
+<a href="{% url 'company:designation_create' %}"
+   class="btn btn-primary"
+   style="margin-bottom:15px;">
+    Add Designation
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Employees</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in designations %}
+            <tr>
+                <td>{{ d.title }}</td>
+                <td>{{ d.employees.count }}</td>
+                <td>
+                    <a href="{% url 'company:designation_edit' d.id %}"
+                       class="btn btn-sm btn-outline-primary">
+                        Edit
+                    </a>
+
+                    <form method="post"
+                          action="{% url 'company:designation_delete' d.id %}"
+                          style="display:inline;"
+                          onsubmit="return confirm('Are you sure?');">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No designations found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

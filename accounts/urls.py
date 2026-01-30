@@ -1,29 +1,25 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
-from .views import signup_view, login_view, logout_view, dashboard_view
-
-from .views import (
-    signup_view,
-    login_view,
-    logout_view,
-    dashboard_view,
-    employee_list_view,
-    employee_create_view,
-)
+from . import views
 
 app_name = "accounts"
 
 urlpatterns = [
-    path("signup/", signup_view, name="signup"),
-    path("login/", login_view, name="login"),
-    path("logout/", logout_view, name="logout"),
-    path("dashboard/", dashboard_view, name="dashboard"),
+    path("signup/", views.signup_view, name="signup"),
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    path("dashboard/", views.dashboard_view, name="dashboard"),
 
-    path("employees/", employee_list_view, name="employee_list"),
-    path("employees/add/", employee_create_view, name="employee_create"),
+    path("employees/", views.employee_list_view, name="employee_list"),
+    path("employees/add/", views.employee_create_view, name="employee_create"),
 
+    path(
+        "employees/delete/<int:employee_id>/",
+        views.employee_delete_view,
+        name="employee_delete"
+    ),
 
-    # Password reset
+    # password reset urls
     path(
         "password-reset/",
         auth_views.PasswordResetView.as_view(
@@ -34,7 +30,6 @@ urlpatterns = [
         ),
         name="password_reset",
     ),
-
     path(
         "password-reset/done/",
         auth_views.PasswordResetDoneView.as_view(
@@ -42,7 +37,6 @@ urlpatterns = [
         ),
         name="password_reset_done",
     ),
-
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(
@@ -51,7 +45,6 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
-
     path(
         "reset/done/",
         auth_views.PasswordResetCompleteView.as_view(

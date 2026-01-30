@@ -1,0 +1,16 @@
+{% extends "base/base_dashboard.html" %}
+
+{% block title %}Add Designation{% endblock %}
+
+{% block content %}
+<h2>Add Designation</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">
+        Save
+    </button>
+</form>
+{% endblock %}

@@ -6,6 +6,10 @@ from django.contrib.auth.models import (
 )
 
 
+# =========================================================
+# User Manager
+# =========================================================
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -30,6 +34,10 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+# =========================================================
+# User Model
+# =========================================================
+
 class User(AbstractBaseUser, PermissionsMixin):
 
     ROLE_CHOICES = (
@@ -45,7 +53,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(
         max_length=20,
         choices=ROLE_CHOICES,
-        default="general_user"
+        default="general_user",
+    )
+
+    # 🔗 Company relation
+    company = models.ForeignKey(
+        "company.Company",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="employees",
+    )
+
+    # 🔗 Designation relation
+    designation = models.ForeignKey(
+        "company.CompanyDesignation",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employees",
     )
 
     is_active = models.BooleanField(default=True)

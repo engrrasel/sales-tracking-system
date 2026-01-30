@@ -3,44 +3,98 @@
 {% block title %}Companies{% endblock %}
 
 {% block content %}
+
 <h2 style="margin-bottom: 20px;">All Companies</h2>
 
 <div class="company-grid">
     {% for company in companies %}
-    <div class="company-card">
+        <div class="company-card">
 
-        <div class="company-header">
-            <h3>{{ company.name }}</h3>
-            <span class="status {{ company.status }}">
-                {{ company.status|title }}
-            </span>
+            <div class="company-header">
+                <h3>{{ company.name }}</h3>
+                <span class="status {{ company.status }}">
+                    {{ company.status|title }}
+                </span>
+            </div>
+
+            <p class="owner">
+                <strong>Owner:</strong> {{ company.owner.email }}
+            </p>
+
+            <div class="actions">
+                {% if company.status != "active" %}
+                    <a href="{% url 'company:status_update' company.id 'active' %}"
+                       class="btn btn-active">
+                        Activate
+                    </a>
+                {% endif %}
+
+                {% if company.status != "hold" %}
+                    <a href="{% url 'company:status_update' company.id 'hold' %}"
+                       class="btn btn-hold">
+                        Hold
+                    </a>
+                {% endif %}
+            </div>
+
         </div>
-
-        <p class="owner">
-            <strong>Owner:</strong> {{ company.owner.email }}
-        </p>
-
-        <div class="actions">
-            {% if company.status != "active" %}
-                <a
-                  href="{% url 'company:status_update' company.id 'active' %}"
-                  class="btn btn-active">
-                    Activate
-                </a>
-            {% endif %}
-
-            {% if company.status != "hold" %}
-                <a
-                  href="{% url 'company:status_update' company.id 'hold' %}"
-                  class="btn btn-hold">
-                    Hold
-                </a>
-            {% endif %}
-        </div>
-
-    </div>
     {% empty %}
         <p>No companies found.</p>
     {% endfor %}
 </div>
+
+<hr style="margin:40px 0;">
+
+<!-- ========================= -->
+<!-- Designation List Section -->
+<!-- ========================= -->
+
+<h2 style="margin-bottom: 20px;">Designations</h2>
+
+<a href="{% url 'company:designation_create' %}"
+   class="btn btn-primary"
+   style="margin-bottom:15px;">
+    Add Designation
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Employees</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in designations %}
+            <tr>
+                <td>{{ d.title }}</td>
+                <td>{{ d.company.name }}</td>
+                <td>{{ d.employees.count }}</td>
+                <td>
+                    <a href="{% url 'company:designation_edit' d.id %}"
+                       class="btn btn-sm btn-outline-primary">
+                        Edit
+                    </a>
+
+                    <form method="post"
+                          action="{% url 'company:designation_delete' d.id %}"
+                          style="display:inline;"
+                          onsubmit="return confirm('Are you sure?');">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No designations found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}

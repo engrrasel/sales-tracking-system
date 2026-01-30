@@ -1,31 +1,54 @@
 from django.db import models
-from django.conf import settings
 
-User = settings.AUTH_USER_MODEL
 
+# =========================================================
+# Company
+# =========================================================
 
 class Company(models.Model):
     STATUS_CHOICES = (
         ("pending", "Pending"),
         ("active", "Active"),
-        ("hold", "On Hold"),
+        ("hold", "Hold"),
     )
 
     name = models.CharField(max_length=255)
 
     owner = models.OneToOneField(
-        User,
+        "accounts.User",
         on_delete=models.CASCADE,
-        related_name="owned_company"  # 🔥 এখানে পরিবর্তন
+        related_name="owned_company",
     )
 
     status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=STATUS_CHOICES,
-        default="active"
+        default="pending",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+
+# =========================================================
+# Company Designation
+# =========================================================
+
+class CompanyDesignation(models.Model):
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name="designations",
+    )
+
+    title = models.CharField(max_length=150)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("company", "title")
+        ordering = ["title"]
+
+    def __str__(self):
+        return f"{self.title} ({self.company.name})"

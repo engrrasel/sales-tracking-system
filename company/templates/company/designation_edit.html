@@ -1,0 +1,21 @@
+{% extends "base/base_dashboard.html" %}
+
+{% block title %}Edit Designation{% endblock %}
+
+{% block content %}
+<h2>Edit Designation</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">
+        Update
+    </button>
+
+    <a href="{% url 'company:designation_list' %}"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
+{% endblock %}

@@ -5,9 +5,33 @@
 {% block content %}
 <h2>Add Employee</h2>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create Employee</button>
-</form>
+{# company_admin only #}
+{% if request.user.role != "company_admin" %}
+    <p class="text-danger">
+        You are not allowed to add employees.
+    </p>
+
+{# company exists check #}
+{% elif not request.user.owned_company %}
+    <p class="text-warning">
+        Please set up your company first.
+    </p>
+
+{# company status check #}
+{% elif request.user.owned_company.status != "active" %}
+    <div class="alert alert-warning">
+        <strong>Your company is not approved yet.</strong><br>
+        Employee creation will be available after admin approval.
+    </div>
+
+{% else %}
+    <form method="post" class="form-card">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">
+            Create Employee
+        </button>
+    </form>
+{% endif %}
+
 {% endblock %}
